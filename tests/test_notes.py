@@ -13,7 +13,6 @@ from notes_api import storage
 
 def test_note_tag_normalize():
     note = Note(
-    id=1,
     title="Python",
     body="Learning Pydantic",
     tags=[" Python ", "API", "python", " api "],
@@ -25,7 +24,6 @@ def test_empty_title_raise_validation_error():
 
     with pytest.raises(ValidationError):
         note = Note(
-            id=1,
             title="",
             body="Learning Pydantic",
             tags=[" Python ", "API", "python", " api "],
@@ -34,13 +32,11 @@ def test_empty_title_raise_validation_error():
 def test_save_load_notes(tmp_path: Path):
     storage.Data = tmp_path / "notes.json"
     note1 = Note(
-        id=1,
         title="Python",
         body="Learning Pydantic",
         tags=['api', 'python'],
     )
     note2 = Note(
-        id=1,
         title="java",
         body="Learning Pydantic",
         tags=['api', 'golang', 'python'],
@@ -99,7 +95,7 @@ def test_search(monkeypatch, tmp_path, capsys):
     monkeypatch.setattr(
         sys,
         "argv",
-        ["cli.py", "search", "Pydantic"],
+        ["cli.py", "search", "pydantic"],
     )
     main()
 

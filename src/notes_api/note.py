@@ -1,10 +1,11 @@
 from datetime import timezone, datetime
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, field_validator
 
 
 class Note(BaseModel):
-    id: int
+    id: UUID = Field(default_factory=uuid4)
     title: str = Field(min_length=1, max_length=100)
     body: str
     tags: list[str] = Field(default_factory=list)

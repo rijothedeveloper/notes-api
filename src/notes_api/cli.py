@@ -16,7 +16,7 @@ def main():
 
     #list
     list_parser = subparsers.add_parser("list", help = "Show all notes")
-    list_parser.add_argument("--tag")
+    list_parser.add_argument("--tags")
 
     #search
     search_parser = subparsers.add_parser("search", help = "Search notes")
@@ -40,7 +40,7 @@ def main():
 
 def add_notes(args):
     notes = load_notes()
-    new_note = Note(id=100, title=args.title, body=args.body, tags=args.tags)
+    new_note = Note(title=args.title, body=args.body, tags=args.tags)
     notes.append(new_note)
     save_notes(notes)
 
@@ -48,7 +48,7 @@ def list_note(args):
     notes = load_notes()
 
     if args.tags:
-        notes = [note for note in notes if args.tag.lower in note.tags]
+        notes = [note for note in notes if args.tag.lower() in note.tags]
 
     notes.sort(key=lambda note: note.created_at, reverse=True)
     for note in notes:
@@ -57,7 +57,7 @@ def list_note(args):
 def search_notes(args):
     notes = load_notes()
     query = args.query
-    matches = [note for note in notes if query in note.title or query in note.body]
+    matches = [note for note in notes if query.lower() in note.title.lower() or query in note.body.lower()]
     for note in matches:
         print(note)
 
@@ -67,6 +67,7 @@ def delete_note(args):
 
     if len(remaining_notes) == len(saved_notes):
         print(f"note with id {args.id} not found")
+        return
     save_notes(remaining_notes)
     print(f"note with id {args.id} deleted")
 
