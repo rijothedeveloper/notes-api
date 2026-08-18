@@ -30,7 +30,7 @@ def test_empty_title_raise_validation_error():
         )
 
 def test_save_load_notes(tmp_path: Path):
-    storage.Data = tmp_path / "notes.json"
+    storage.DATA = tmp_path / "notes.json"
     note1 = Note(
         title="Python",
         body="Learning Pydantic",
@@ -51,7 +51,7 @@ def test_save_load_notes(tmp_path: Path):
     assert notes == retrieved_notes
 
 def test_cli_add_note(monkeypatch: MonkeyPatch, tmp_path: Path):
-    storage.Data = tmp_path / "notes.json"
+    storage.DATA = tmp_path / "notes.json"
 
     monkeypatch.setattr(
         sys,
@@ -75,7 +75,7 @@ def test_cli_add_note(monkeypatch: MonkeyPatch, tmp_path: Path):
     assert notes[0].body == "Learning Pydantic"
 
 def test_search(monkeypatch, tmp_path, capsys):
-    storage.Data = tmp_path / "notes.json"
+    storage.DATA = tmp_path / "notes.json"
 
     monkeypatch.setattr(
         sys,
