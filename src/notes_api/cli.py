@@ -1,4 +1,5 @@
 import argparse
+import uuid
 
 from notes_api.note import Note
 from notes_api.storage import load_notes, save_notes
@@ -24,7 +25,7 @@ def main():
 
     #delete
     delete_parser = subparsers.add_parser("delete", help = "Delete notes")
-    delete_parser.add_argument("id", type=int)
+    delete_parser.add_argument("id", type=uuid.UUID)
 
     args = parser.parse_args()
 
@@ -48,7 +49,7 @@ def list_note(args):
     notes = load_notes()
 
     if args.tags:
-        notes = [note for note in notes if args.tag.lower() in note.tags]
+        notes = [note for note in notes if args.tags.lower() in note.tags]
 
     notes.sort(key=lambda note: note.created_at, reverse=True)
     for note in notes:
