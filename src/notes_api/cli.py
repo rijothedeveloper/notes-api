@@ -3,6 +3,7 @@ import uuid
 
 from notes_api.note import Note
 from notes_api.storage import load_notes, save_notes
+from notes_api import service
 
 
 def main():
@@ -40,36 +41,23 @@ def main():
 
 
 def add_notes(args):
-    notes = load_notes()
-    new_note = Note(title=args.title, body=args.body, tags=args.tags)
-    notes.append(new_note)
-    save_notes(notes)
+    service.add_note(args.title, args.body, args.tags)
 
 def list_note(args):
-    notes = load_notes()
-
-    if args.tags:
-        notes = [note for note in notes if args.tags.lower() in note.tags]
-
-    notes.sort(key=lambda note: note.created_at, reverse=True)
+    notes = service.list_notes(args.tags)
     for note in notes:
         print(note)
 
 def search_notes(args):
-    notes = load_notes()
-    query = args.query
-    matches = [note for note in notes if query.lower() in note.title.lower() or query in note.body.lower()]
+    matches = service.search_notes(args.query)
     for note in matches:
         print(note)
 
 def delete_note(args):
-    saved_notes = load_notes()
-    remaining_notes = [note for note in saved_notes if note.id != args.id]
-
-    if len(remaining_notes) == len(saved_notes):
+    deleted = service.delete_note(args.id)
+    if not deleted:
         print(f"note with id {args.id} not found")
         return
-    save_notes(remaining_notes)
     print(f"note with id {args.id} deleted")
 
 if __name__ == "__main__":
