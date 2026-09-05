@@ -18,6 +18,13 @@ def list_notes(tag: str | None = None) -> list[Note]:
     notes.sort(key=lambda note: note.created_at, reverse=True)
     return notes
 
+def get_note(note_id: UUID) -> Note | None:
+    notes = load_notes()
+    for note in notes:
+        if note.id == note_id:
+            return note
+    return None
+
 def search_notes(query: str) -> list[Note]:
     notes = load_notes()
     matches = [note for note in notes if query.lower() in note.title.lower() or query in note.body.lower()]
