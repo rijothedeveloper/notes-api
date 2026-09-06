@@ -13,7 +13,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 @app.get("/notes")
-def notes(tag: str) -> list[Note]:
+def notes(tag: str| None = None) -> list[Note]:
     notes = service.list_notes(tag)
     return notes
 
