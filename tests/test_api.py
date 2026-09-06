@@ -54,7 +54,7 @@ def test_get_note_not_found(tmp_path, monkeypatch):
 
 def test_search_notes(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "DATA", tmp_path / "notes.json")
-    note_resp = client.post("/notes", json={"title": "First", "body": "ai is good in python", "tags": ["AI ", "ai"]})
+    note_resp = client.post("/notes", json={"title": "First", "body": "ai is good in Python", "tags": ["AI ", "ai"]})
     url = f"/search?query=python"
     notes = client.get(url)
     assert notes.status_code == 200

@@ -323,6 +323,163 @@ This project is useful for practicing several Python concepts:
 * `pyproject.toml`
 * Dependency management with uv
 
+
+## API Endpoints
+
+The Notes API provides HTTP endpoints for creating and retrieving notes.
+
+### Base URL
+
+```text
+http://127.0.0.1:8000
+```
+
+### Available Endpoints
+
+| Method | Endpoint      | Description            |
+| ------ | ------------- | ---------------------- |
+| `POST` | `/notes`      | Create a new note      |
+| `GET`  | `/notes/{id}` | Get a note by its UUID |
+
+---
+
+### Create a Note
+
+```http
+POST /notes
+```
+
+Creates a new note.
+
+#### Request Body
+
+```json
+{
+  "title": "First",
+  "body": "My first note",
+  "tags": ["AI", "python"]
+}
+```
+
+The `title` is required.
+
+Tags are automatically normalized by:
+
+* Trimming whitespace
+* Converting to lowercase
+* Removing duplicates
+* Sorting
+
+For example:
+
+```json
+{
+  "title": "First",
+  "tags": ["AI ", "ai"]
+}
+```
+
+will store:
+
+```json
+{
+  "tags": ["ai"]
+}
+```
+
+#### Example
+
+```bash
+curl -X POST http://127.0.0.1:8000/notes \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "First",
+    "body": "Learning FastAPI",
+    "tags": ["AI ", "ai", "Python"]
+  }'
+```
+
+A UUID and creation timestamp are automatically generated for the note.
+
+Example response:
+
+```json
+{
+  "id": "c183b81c-a36c-41f1-b0af-b8ce1496f879",
+  "title": "First",
+  "body": "Learning FastAPI",
+  "tags": ["ai", "python"],
+  "created_at": "2026-09-06T20:00:00Z"
+}
+```
+
+---
+
+### Get a Note
+
+```http
+GET /notes/{id}
+```
+
+Returns a note using its UUID.
+
+#### Example
+
+```bash
+curl http://127.0.0.1:8000/notes/c183b81c-a36c-41f1-b0af-b8ce1496f879
+```
+
+Example response:
+
+```json
+{
+  "id": "c183b81c-a36c-41f1-b0af-b8ce1496f879",
+  "title": "First",
+  "body": "Learning FastAPI",
+  "tags": ["ai", "python"],
+  "created_at": "2026-09-06T20:00:00Z"
+}
+```
+
+#### Note Not Found
+
+If the UUID is valid but the note does not exist:
+
+```http
+404 Not Found
+```
+
+Response:
+
+```json
+{
+  "detail": "Note not found"
+}
+```
+
+If an invalid UUID is supplied, FastAPI returns:
+
+```http
+422 Unprocessable Entity
+```
+
+---
+
+## Interactive API Documentation
+
+When the FastAPI application is running, Swagger UI is available at:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+The OpenAPI schema is available at:
+
+```text
+http://127.0.0.1:8000/openapi.json
+```
+
+
 ## License
 
 Add a license to this repository if you intend to distribute or reuse the project publicly.
