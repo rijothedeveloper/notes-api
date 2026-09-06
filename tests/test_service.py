@@ -1,3 +1,5 @@
+import pytest
+
 from notes_api import service, storage
 
 
@@ -28,9 +30,12 @@ def test_search_is_case_insensitive(tmp_path, monkeypatch):
     notes = service.search_notes(query)
     assert [n.title for n in notes] == ["About Pydantic"]
 
-# def test_corrupt_file_raises(tmp_path, monkeypatch):
-#     monkeypatch.setattr(storage, "DATA", tmp_path / "notes.json")
-#     service.delete_note(2)
+def test_corrupt_file_raises(tmp_path, monkeypatch):
+    monkeypatch.setattr(storage, "DATA", tmp_path / "notes.json")
+    storage.DATA.write_text("{broken")
+
+    with pytest.raises(ValueError):
+        service.list_notes()
 
 
 

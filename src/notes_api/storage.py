@@ -11,9 +11,7 @@ def load_notes() -> list[Note]:
         data = json.loads(DATA.read_text())
         return [Note.model_validate(item) for item in data]
     except json.JSONDecodeError as e:
-        print("Invalid JSON:", e)
-        print("Line:", e.lineno)
-        print("Column:", e.colno)
+        raise ValueError(f"{DATA} is corrupted: {e}") from e
 
 def save_notes(notes: list[Note]):
     data = [note.model_dump(mode="json") for note in notes]
