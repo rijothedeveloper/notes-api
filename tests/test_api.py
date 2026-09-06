@@ -30,7 +30,7 @@ def test_get_notes(tmp_path, monkeypatch):
     assert resp.status_code == 200
     assert len(resp.json()) == 2
 
-def test_get_notes(tmp_path, monkeypatch):
+def test_get_notes_by_idg(tmp_path, monkeypatch):
     monkeypatch.setattr(storage, "DATA", tmp_path / "notes.json")
 
     note_resp = client.post("/notes", json={"title": "First", "tags": ["AI ", "ai"]})

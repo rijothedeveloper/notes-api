@@ -27,7 +27,7 @@ def get_note(note_id: UUID) -> Note | None:
 
 def search_notes(query: str) -> list[Note]:
     notes = load_notes()
-    matches = [note for note in notes if query.lower() in note.title.lower() or query in note.body.lower()]
+    matches = [note for note in notes if query.lower() in note.title.lower() or query.lower() in note.body.lower()]
     return matches
 
 def delete_note(note_id: UUID) -> bool:
